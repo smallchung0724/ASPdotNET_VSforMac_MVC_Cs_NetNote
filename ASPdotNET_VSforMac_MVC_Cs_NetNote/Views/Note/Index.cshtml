@@ -1,0 +1,13 @@
+﻿@model List<ASPdotNET_VSforMac_MVC_Cs_NetNote.Models.Note>
+
+<div class="container-fluid">
+    <div class="row"><a asp-action="Add">增加Note</a></div>
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <h3>@item.Title</h3>
+                <div class="content" id="md_@item.Id">@item.Content</div>
+                <hr />
+            </div>
+         }
+</div>
