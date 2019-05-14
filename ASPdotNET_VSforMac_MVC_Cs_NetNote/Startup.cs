@@ -33,6 +33,7 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote
             services.AddDbContext<NoteContext>(options => options.UseSqlite(connection));
 
             services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<INoteTypeRepository, NoteTypeRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

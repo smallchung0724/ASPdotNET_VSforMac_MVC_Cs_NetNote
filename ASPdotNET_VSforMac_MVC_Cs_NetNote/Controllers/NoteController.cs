@@ -6,6 +6,7 @@ using ASPdotNET_VSforMac_MVC_Cs_NetNote.Models;
 using ASPdotNET_VSforMac_MVC_Cs_NetNote.Repository;
 using ASPdotNET_VSforMac_MVC_Cs_NetNote.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,23 +14,39 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Controllers
 {
     public class NoteController : Controller
     {
-        private INoteRepository _noteRepository;
+        private readonly INoteRepository _noteRepository;
+        private readonly INoteTypeRepository _noteTypeRepository;
 
-        public NoteController(INoteRepository noteRepository)
+        public NoteController(INoteRepository noteRepository, INoteTypeRepository noteTypeReopsitory)
         {
             _noteRepository = noteRepository;
+            _noteTypeRepository = noteTypeReopsitory;
         }
 
         // GET: /<controller>/
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int pageindex = 1)
         {
-            var notes = await _noteRepository.ListAsync();
+            var pagesize = 1;
 
-            return View(notes);
+            var notes = _noteRepository.PageList(pageindex, pagesize);
+
+            ViewBag.PageCount = notes.Item2;
+
+            ViewBag.PageIndex = pageindex;
+
+            return View(notes.Item1);
         }
 
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
+            var types = await _noteTypeRepository.ListAsync();
+
+            ViewBag.Types = types.Select(r => new SelectListItem
+            {
+                Text = r.Name,
+                Value =r.Id.ToString()
+            });
+
             return View();
         }
 
@@ -44,7 +61,8 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Controllers
             {
                 Title = model.Title,
                 Content = model.Content,
-                Create = DateTime.Now
+                Create = DateTime.Now,
+                TypeId = model.Type
             });
 
             return RedirectToAction("Index");

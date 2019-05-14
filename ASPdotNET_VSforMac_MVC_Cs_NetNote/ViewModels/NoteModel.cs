@@ -13,5 +13,8 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.ViewModels
         [Required]
         [Display(Name = "內容")]
         public string Content { get; set; }
+
+        [Display(Name = "類型")]
+        public int Type { get; set; }
     }
 }
