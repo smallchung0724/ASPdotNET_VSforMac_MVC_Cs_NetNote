@@ -1,12 +1,10 @@
 ﻿@{
     var types = ViewBag.Types as IEnumerable<SelectListItem>;
 }
-
 @model ASPdotNET_VSforMac_MVC_Cs_NetNote.ViewModels.NoteModel
-
 <div class="container-fluid">
     <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-        <form method="post" asp-action="Add">
+        <form method="post" asp-action="Add" enctype="multipart/form-data">
             <div class="form-group">
                 <label asp-for="Title"></label>
                 <input asp-for="Title" type="text" placeholder="標題" class="form-control" />
@@ -19,10 +17,19 @@
                 <label asp-for="Type"></label>
                 <select asp-for="Type" asp-items="types" class="form-control"></select>
             </div>
-            <hr/>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" placeholder="如需加密請輸入密碼" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Attachment"></label>
+                <input asp-for="Attachment" type="file" class="form-control" />
+            </div>
+            <hr />
             <p>
                 <button type="submit" class="btn btn-primary">儲存</button>
             </p>
         </form>
     </div>
 </div>
+    

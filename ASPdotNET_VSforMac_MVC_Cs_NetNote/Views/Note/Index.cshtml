@@ -1,23 +1,33 @@
 ﻿@{
     var pageindex = Convert.ToInt32(ViewBag.PageIndex);
-    var pagecount = Convert.ToInt32(ViewBag.pageCount);
+    var pagecount = Convert.ToInt32(ViewBag.PageCount);
     var pagestart = pageindex - 2 > 0 ? pageindex - 2 : 1;
     var pageend = pageindex + 2 >= pagecount ? pagecount : pagestart + 4;
 }
-
 @model List<ASPdotNET_VSforMac_MVC_Cs_NetNote.Models.Note>
 
 <div class="container-fluid">
     <div class="row"><a asp-action="Add">增加Note</a></div>
-        @foreach (var item in Model)
+    @foreach (var item in Model)
+    {
+        @if (string.IsNullOrEmpty(item.Password))
         {
             <div class="row">
                 <h3>@item.Title</h3>
-                <h5>類型：@item.Type.Name</h5>
+                <h5>类型：@item.Type.Name</h5>
                 <div class="content" id="md_@item.Id">@item.Content</div>
+                @if (!string.IsNullOrEmpty(item.Attachment))
+                {
+                    <a href="@item.Attachment">下載</a>
+                }
                 <hr />
             </div>
-         }
+        }
+        else
+        {
+            <div class="row"><a asp-action="Detail" asp-route-id="@item.Id">內容己加密</a></div>
+        }
+    }
 </div>
 
 <nav>

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetNote.Repository;
 
 namespace ASPdotNET_VSforMac_MVC_Cs_NetNote
 {

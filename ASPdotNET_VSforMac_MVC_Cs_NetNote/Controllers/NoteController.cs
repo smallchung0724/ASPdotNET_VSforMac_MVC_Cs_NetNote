@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ASPdotNET_VSforMac_MVC_Cs_NetNote.Models;
 using ASPdotNET_VSforMac_MVC_Cs_NetNote.Repository;
 using ASPdotNET_VSforMac_MVC_Cs_NetNote.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -44,28 +46,55 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Controllers
             ViewBag.Types = types.Select(r => new SelectListItem
             {
                 Text = r.Name,
-                Value =r.Id.ToString()
+                Value = r.Id.ToString()
             });
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(NoteModel model)
+        public async Task<IActionResult> Add([FromServices]IHostingEnvironment env, NoteModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            string filename = string.Empty;
+            if (model.Attachment != null)
+            {
+                filename = Path.Combine("file", Guid.NewGuid().ToString() + Path.GetExtension(model.Attachment.FileName));
+                using (var stream = new FileStream(Path.Combine(env.WebRootPath, filename), FileMode.CreateNew))
+                {
+                    model.Attachment.CopyTo(stream);
+                }
             }
             await _noteRepository.AddAsync(new Note
             {
                 Title = model.Title,
                 Content = model.Content,
                 Create = DateTime.Now,
-                TypeId = model.Type
+                TypeId = model.Type,
+                Password = model.Password,
+                Attachment = filename
             });
-
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Detail(int id)
+        {
+            var note = await _noteRepository.GetByIdAsync(id);
+            if (!string.IsNullOrEmpty(note.Password))
+                return View();
+            return View(note);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Detail(int id, string password)
+        {
+            var note = await _noteRepository.GetByIdAsync(id);
+            if (!note.Password.Equals(password))
+                return BadRequest("密碼錯誤,返回重新輸入");
+            return View(note);
         }
     }
 }
