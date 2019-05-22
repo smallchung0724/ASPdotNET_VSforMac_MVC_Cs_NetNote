@@ -21,7 +21,7 @@ namespace NetNote.Repository
             return context.SaveChangesAsync();
         }
 
-        public Task<Note> GetByIdAsync(int id)
+        public Task<Note> GetByIdAsync(int? id)
         {
             return context.Notes.Include(type => type.Type).FirstOrDefaultAsync(r => r.Id == id);
         }

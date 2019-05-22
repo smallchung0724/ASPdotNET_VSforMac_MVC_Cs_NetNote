@@ -13,13 +13,16 @@
         @if (string.IsNullOrEmpty(item.Password))
         {
             <div class="row">
+                <h2>@item.Id</h2>
                 <h3>@item.Title</h3>
-                <h5>类型：@item.Type.Name</h5>
+                <h5>類型：@item.Type.Name</h5>
+                <h6>@item.TypeId</h6>
                 <div class="content" id="md_@item.Id">@item.Content</div>
                 @if (!string.IsNullOrEmpty(item.Attachment))
                 {
                     <a href="@item.Attachment">下載</a>
                 }
+                <a asp-action="Edit" asp-route-id="@item.Id">修改</a>
                 <hr />
             </div>
         }

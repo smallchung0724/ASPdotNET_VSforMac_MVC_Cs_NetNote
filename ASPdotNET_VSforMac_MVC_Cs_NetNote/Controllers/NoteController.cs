@@ -80,6 +80,40 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Edit(int? Id)
+        {
+            var note = await _noteRepository.GetByIdAsync(Id);
+
+            var types = await _noteTypeRepository.ListAsync();
+
+            ViewBag.Types = types.Select(r => new SelectListItem
+            {
+                Text = r.Name,
+                Value = r.Id.ToString()
+            });
+
+            return View(note);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Note note, NoteModel model)
+        {
+            if (id != note.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                note.TypeId = model.Type;
+                await _noteRepository.UpdateAsync(note);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(note);
+        }
+
         public async Task<IActionResult> Detail(int id)
         {
             var note = await _noteRepository.GetByIdAsync(id);
