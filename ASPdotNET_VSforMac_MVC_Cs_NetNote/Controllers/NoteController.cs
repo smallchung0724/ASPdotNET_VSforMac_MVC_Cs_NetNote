@@ -114,6 +114,15 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Controllers
             return View(note);
         }
 
+        public async Task<IActionResult> Delete(int? Id)
+        {
+            var note = await _noteRepository.GetByIdAsync(Id);
+
+            await _noteRepository.DeleteAsync(note);
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Detail(int id)
         {
             var note = await _noteRepository.GetByIdAsync(id);

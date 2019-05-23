@@ -49,5 +49,11 @@ namespace NetNote.Repository
             context.Entry(note).State = EntityState.Modified;
             return context.SaveChangesAsync();
         }
+
+        public Task DeleteAsync(Note note)
+        {
+            context.Notes.Remove(note);
+            return context.SaveChangesAsync();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace ASPdotNET_VSforMac_MVC_Cs_NetNote.Repository
         Task<List<Note>> ListAsync();
         Task AddAsync(Note note);
         Task UpdateAsync(Note note);
+        Task DeleteAsync(Note note);
 
         Tuple<List<Note>, int> PageList(int pageindex, int pagesize);
     }
