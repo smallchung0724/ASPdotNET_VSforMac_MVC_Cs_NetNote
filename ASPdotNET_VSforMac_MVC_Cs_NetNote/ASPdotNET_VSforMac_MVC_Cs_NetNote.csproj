@@ -16,5 +16,6 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Note\" />
     <Folder Include="wwwroot\file\" />
+    <Folder Include="API\" />
   </ItemGroup>
 </Project>
